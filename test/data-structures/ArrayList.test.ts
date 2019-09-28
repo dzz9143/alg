@@ -37,4 +37,51 @@ describe('ArrayList', () => {
             al.insert(3, 1);
         }).toThrowError('index out of bounds');
     });
+
+    // indexOf
+    it('should be able to return the index of first occurrence of element', () => {
+        const al = new ArrayList();
+        al.push(1);
+        al.push(10);
+        al.push(100);
+
+        expect(al.indexOf(1)).toEqual(0);
+        expect(al.indexOf(10)).toEqual(1);
+        expect(al.indexOf(100)).toEqual(2);
+        expect(al.indexOf(-1)).toEqual(-1);
+
+        al.insert(0, -1);
+        expect(al.indexOf(-1)).toEqual(0);
+        expect(al.indexOf(1)).toEqual(1);
+    });
+
+    // removeIndex
+    it('should be able to remove element at specified index', () => {
+        const al = new ArrayList();
+        al.push(1);
+        al.push(2);
+        al.push(3);
+
+        al.removeIndex(1);
+        expect(al.toString()).toEqual('[1, 3]');
+        
+        al.removeIndex(1);
+        expect(al.toString()).toEqual('[1]');
+
+        expect(() => {
+            al.removeIndex(3);
+        }).toThrowError('index out of bounds');
+    });
+
+    // remove
+    it('should be able to remove element', () => {
+        const al = new ArrayList();
+        al.push(1);
+        al.push(2);
+        al.push(3);
+
+        expect(al.remove(1)).toBeTruthy();
+        expect(al.toString()).toEqual('[2, 3]');
+        expect(al.remove(0)).toBeFalsy();
+    });
 })
