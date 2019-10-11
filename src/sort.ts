@@ -30,3 +30,21 @@ export function bubbleSort(arr: any[], compare: ICompare = defaultCompare): any[
 
     return arr;
 }
+
+export function insertionSort(arr: any[], compare: ICompare = defaultCompare): any[] {
+    if(arr.length <= 1) {
+        return arr;
+    }
+
+    for(let i = 1, len = arr.length; i < len; ++i) {
+        const val = arr[i];
+        let j = i - 1;
+        for(; j >= 0 && compare(arr[j], val) > 0; --j) {
+            arr[j + 1] = arr[j];
+        }
+
+        arr[j + 1] = val;
+    }
+
+    return arr;
+}
