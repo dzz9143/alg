@@ -48,3 +48,21 @@ export function insertionSort(arr: any[], compare: ICompare = defaultCompare): a
 
     return arr;
 }
+
+export function selectionSort(arr: any[], compare: ICompare = defaultCompare): any[] {
+    if(arr.length <= 1) return arr;
+
+    for(let i = 0, len = arr.length; i < len; i++) {
+        let selected = i;
+        for(let j = i + 1; j < len; j++) {
+            if(compare(arr[selected], arr[j]) > 0) {
+                selected = j;
+            }
+        }
+        let tmp = arr[selected];
+        arr[selected] = arr[i];
+        arr[i] = tmp;
+    }
+
+    return arr;
+}
