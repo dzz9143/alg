@@ -1,9 +1,13 @@
 
 export interface ICompare {
-    (a: any, b: any): number
+    (a: any, b: any): number;
 }
 
-const defaultCompare: ICompare = (a, b) => {
+export interface ISort {
+    (arr: any[], compare: ICompare): any[];
+}
+
+export const defaultCompare: ICompare = (a, b) => {
     return a - b;
 }
 
