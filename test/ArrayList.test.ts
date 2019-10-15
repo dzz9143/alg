@@ -1,4 +1,4 @@
-import ArrayList from '../../src/data-structures/ArrayList';
+import ArrayList from '../src/ArrayList';
 
 describe('ArrayList', () => {
     it('should be able to create a new ArrayList with default capacity', () => {

@@ -1,4 +1,4 @@
-import SinglyLinkedList from '../../src/data-structures/SinglyLinkedList';
+import SinglyLinkedList from '../src/SinglyLinkedList';
 
 describe('SinglyLinkedList', () => {
   it('init successfully', () => {
