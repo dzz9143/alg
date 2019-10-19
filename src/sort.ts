@@ -56,7 +56,7 @@ export function insertionSort(arr: any[], compare: ICompare = defaultCompare): a
 export function shellSort(arr: any[], compare: ICompare = defaultCompare): any[] {
     if (arr.length <= 0) return arr;
     const len = arr.length;
-    let gap = Math.floor(len/2);
+    let gap = Math.floor(len / 2);
 
     while (gap >= 1) {
         for (let i = 0; i < len; i += gap) {
@@ -90,4 +90,55 @@ export function selectionSort(arr: any[], compare: ICompare = defaultCompare): a
     }
 
     return arr;
+}
+
+export function mergeSort(arr: any[], compare: ICompare = defaultCompare): any[] {
+    const _merge = (arr1: any[], arr2: any[]): any[] => {
+        const res = [];
+        let i = 0, j = 0;
+
+        while(i < arr1.length && j < arr2.length) {
+            if(compare(arr1[i], arr2[j]) < 0) {
+                res.push(arr1[i++]);
+            } else {
+                res.push(arr2[j++]);
+            }
+        }
+
+        while(i < arr1.length) {
+            res.push(arr1[i++]);
+        }
+
+        while(j < arr2.length){
+            res.push(arr2[j++]);
+        }
+
+        return res;
+    }
+
+    // const _merge = (arr1: any[], arr2: any[]): any[] => {
+    //     const res = [];
+    //     let i = 0, j = 0;
+    //     arr1.push(arr1[arr1.length - 1]);
+    //     arr2.push(arr2[arr2.length - 1]);
+    //     while (arr1[i] <= arr1[arr1.length - 1] && arr2[j] <= arr2[arr2.length - 1]) {
+    //         if(compare(arr1[i], arr2[j]) < 0) {
+    //             res.push(arr1[i++]);
+    //         }else {
+    //             res.push(arr2[j++]);
+    //         }
+    //     }
+    //     return res;
+    // }
+
+    const _merge_sort = (arr: any[], left: number, right: number): any[] => {
+        if (left > right) return [];
+        if (left === right) return [arr[left]];
+        const mid = Math.floor(left + (right - left) / 2);
+        const arr1 = _merge_sort(arr, left, mid);
+        const arr2 = _merge_sort(arr, mid + 1, right);
+        return _merge(arr1, arr2);
+    }
+
+    return _merge_sort(arr, 0, arr.length - 1);
 }
