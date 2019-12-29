@@ -77,6 +77,19 @@ class DoubleLinkList<T> {
         return node;
     }
 
+    public find = (v: T) => {
+        let p = this.dumpHead.next;
+        while(p !== this.dumpHead) {
+            if(p.value === v) {
+                return p;
+            }
+
+            p = p.next;
+        }
+
+        return null;
+    }
+
     public toString = () => {
         const arr = [];
         let p = this.dumpHead.next;
@@ -87,6 +100,7 @@ class DoubleLinkList<T> {
 
         return `[${arr.join(', ')}]`;
     }
+
 }
 
 export {
