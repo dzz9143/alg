@@ -1,9 +1,9 @@
 class Node<T> {
-    public value: T;
+    public element: T;
     public prev: Node<T>;
     public next: Node<T>;
     constructor(v: T = null, prev: Node<T> = null, next: Node<T> = null) {
-        this.value = v;
+        this.element = v;
         this.prev = prev || null;
         this.next = next || null;
     }
@@ -38,6 +38,14 @@ class DoubleLinkList<T> {
         return node;
     }
 
+    public head = () => {
+        return this.dumpHead.next;
+    }
+
+    public tail = () => {
+        return this.dumpHead.prev;
+    }
+
     public append = (v: T) => {
         const node = this.createNode(v);
         const tail = this.dumpHead.prev;
@@ -62,7 +70,16 @@ class DoubleLinkList<T> {
         return node;
     }
 
-    public remove = (node: Node<T>) => {
+    public insertNode = (prevNode: Node<T>, node: Node<T>) => {
+        const nextNode = prevNode.next;
+        prevNode.next = node;
+        node.prev = prevNode;
+        node.next = nextNode;
+        nextNode.prev = node;
+        return node;
+    }
+
+    public removeNode = (node: Node<T>) => {
         if(!node) {
             return node;
         }
@@ -80,7 +97,7 @@ class DoubleLinkList<T> {
     public find = (v: T) => {
         let p = this.dumpHead.next;
         while(p !== this.dumpHead) {
-            if(p.value === v) {
+            if(p.element === v) {
                 return p;
             }
 
@@ -94,7 +111,7 @@ class DoubleLinkList<T> {
         const arr = [];
         let p = this.dumpHead.next;
         while(p !== this.dumpHead) {
-            arr.push(p.value);
+            arr.push(p.element);
             p = p.next;
         }
 

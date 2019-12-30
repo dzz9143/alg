@@ -8,7 +8,7 @@ describe('Node should', () => {
 
     it('set prev and next pointer to null by default', () => {
         const node = new Node(10);
-        expect(node.value).toEqual(10);
+        expect(node.element).toEqual(10);
         expect(node.prev).toBeNull();
         expect(node.next).toBeNull();
     });
@@ -57,7 +57,7 @@ describe('DoubleLinkList\'s', () => {
             const list = new DoubleLinkList();
             const node = list.append(1);
             expect(list.toString()).toEqual('[1]');
-            expect(node.value).toEqual(1);
+            expect(node.element).toEqual(1);
         })
     });
 
@@ -67,7 +67,7 @@ describe('DoubleLinkList\'s', () => {
             const node = list.append(1);
             const node2 = list.insert(node, 233);
             expect(list.toString()).toEqual('[1, 233]');
-            expect(node2.value).toEqual(233);
+            expect(node2.element).toEqual(233);
         });
     });
 
@@ -75,9 +75,9 @@ describe('DoubleLinkList\'s', () => {
         it('return a node directly if its value match the passed value', () => {
             const list = new DoubleLinkList([1, 2, 3, 4]);
             const node = list.find(3);
-            expect(node.value).toEqual(3);
-            expect(node.next.value).toEqual(4);
-            expect(node.prev.value).toEqual(2);
+            expect(node.element).toEqual(3);
+            expect(node.next.element).toEqual(4);
+            expect(node.prev.element).toEqual(2);
         });
 
         it('return null if no node match the value', () => {
@@ -86,7 +86,7 @@ describe('DoubleLinkList\'s', () => {
             expect(node).toBeNull();
             list.append(4);
             node = list.find(4);
-            expect(node.value).toEqual(4);
+            expect(node.element).toEqual(4);
         });
     });
 
@@ -94,16 +94,16 @@ describe('DoubleLinkList\'s', () => {
         it('be able to remove a given node', () => {
             const list = new DoubleLinkList([1, 2, 3, 4, 5]);
             const node = list.find(2);
-            list.remove(node);
+            list.removeNode(node);
             expect(list.toString()).toEqual('[1, 3, 4, 5]');
         });
 
         it('be able to get the remove node', () => {
             const list = new DoubleLinkList([1, 2, 3]);
             const node = list.find(2);
-            const removed = list.remove(node);
+            const removed = list.removeNode(node);
             expect(list.toString()).toEqual('[1, 3]')
-            expect(removed.value).toEqual(2);
+            expect(removed.element).toEqual(2);
             expect(removed.next).toBeNull();
             expect(removed.prev).toBeNull();
         });
