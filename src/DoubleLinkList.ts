@@ -107,17 +107,16 @@ class DoubleLinkList<T> {
         return null;
     }
 
-    public toString = () => {
+    public toString = (cb?: Function) => {
         const arr = [];
         let p = this.dumpHead.next;
         while(p !== this.dumpHead) {
-            arr.push(p.element);
+            arr.push(cb ? cb(p.element): p.element);
             p = p.next;
         }
 
         return `[${arr.join(', ')}]`;
     }
-
 }
 
 export {
