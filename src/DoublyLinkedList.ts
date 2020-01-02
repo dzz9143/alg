@@ -73,6 +73,22 @@ class List<T> implements DoublyLinkedList<T> {
         return this.insertAfter(this.tail, node);
     }
 
+    public remove = (node: Node<T>) => {
+        if(!node.prev) {
+            this.head = node.next;
+        } else {
+            node.prev.next = node.next;
+        }
+
+        if(!node.next) {
+            this.tail = node.prev;
+        } else {
+            node.next.prev = node.prev;
+        }
+
+        return node;
+    }
+
     public toString = () => {
         let p = this.head;
         const arr = [];
