@@ -101,7 +101,7 @@ class List<T> implements DoublyLinkedList<T> {
 
 }
 
-export default {
+export {
     Node,
     List,
 }

@@ -1,6 +1,4 @@
-import DoublyLinkedList from '../src/DoublyLinkedList';
-
-const { Node, List } = DoublyLinkedList;
+import { Node, List } from '../src/DoublyLinkedList';
 
 describe('List should', () => {
     it('be able to insert at the beginning of list', () => {

@@ -8,24 +8,42 @@ describe('LRU Cache should', () => {
         expect(cache.capacity()).toEqual(100);
     });
 
-    it('be able to set cache entry', () => {
-        const cache = new LRUCache(3);
+    it('be able to set&get cache entry', () => {
+        const cache = new LRUCache();
         cache.set('foo', 1);
-        cache.set('bar', 2);
-        cache.set('hello', 3);
-        expect(cache.size()).toEqual(3);
         expect(cache.get('foo')).toEqual(1);
     });
 
-    it('be able to discard LRU entry when size if full', () => {
-        const cache = new LRUCache(3);
+    it('multiple set to same key will prompt the cache entry', () => {
+        const cache = new LRUCache();
         cache.set('foo', 1);
-        cache.set('bar', 2);
-        cache.set('hello', 3);
+        cache.set('bar', 100);
+        expect(cache.list.tail.data.key).toEqual('foo');
+        expect(cache.list.head.data.key).toEqual('bar');
+        cache.set('foo', 2);
+        expect(cache.list.head.data.key).toEqual('foo');
+        expect(cache.list.head.data.value).toEqual(2);
+    });
 
-        console.log(cache.list.toString((e: any) => e.value));
+    it('muliple get to same key will prompt the cache entry', () => {
+        const cache = new LRUCache();
+        cache.set('foo', 1);
+        cache.set('bar', 100);
+        expect(cache.list.tail.data.key).toEqual('foo');
+        expect(cache.list.head.data.key).toEqual('bar');
+        expect(cache.get('foo')).toEqual(1);
+        expect(cache.list.head.data.key).toEqual('foo');
+    });
 
-        cache.set('new', 4);
-        expect(cache.get('foo')).toBeNull();
+    it('will remove LRU entry when add an entry to a full size cache', () => {
+        const cache = new LRUCache(3);
+        cache.set('a' ,1);
+        cache.set('b' ,10);
+        cache.set('c' ,100);
+        expect(cache.list.tail.data.key).toEqual('a');
+        expect(cache.size()).toEqual(3);
+        cache.set('d', 1000);
+        expect(cache.size()).toEqual(3);
+        expect(cache.get('a')).toBeNull();
     });
 });

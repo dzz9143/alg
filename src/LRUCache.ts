@@ -1,45 +1,59 @@
-import { DoubleLinkList, Node } from './DoubleLinkList';
+import { Node, List } from "./DoublyLinkedList";
+
+type CacheEntry<T> = {
+    key: string;
+    value: T;
+}
 
 class LRUCache<T> {
-    private map: Map<string, Node<{ key: string, value: T}>>;
-    public list: DoubleLinkList<{ key: string, value: T}>;
+    private map: Map<string, Node<CacheEntry<T>>>;
+    public list: List<CacheEntry<T>>;
     private limit: number;
 
     constructor(limit: number = 100) {
         this.map = new Map();
-        this.list = new DoubleLinkList();
+        this.list = new List();
         this.limit = limit;
     }
 
     public set = (key: string, value: T) => {
         const node = this.map.get(key);
-        if (!node) {
-            if(this.map.size >= this.limit) {
-                const tailNode = this.list.tail();
-                this.list.removeNode(tailNode);
-                this.map.delete(tailNode.element.key);
-            }
-            const node = this.list.insert(this.list.head(), {
+        if(node) {
+            this.list.remove(node);
+            node.data = {
                 key,
                 value,
-            });
-            this.map.set(key, node);
-            return;
+            };
+            this.list.insertBeginning(node);
+            return node;
         }
 
-        this.list.removeNode(node);
-        this.list.insertNode(this.list.head(), node);
+        if(this.map.size >= this.limit) {
+            this.map.delete(this.list.tail.data.key);
+            this.list.remove(this.list.tail);
+        }
+
+        const newNode = new Node({
+            key,
+            value,
+        });
+
+        this.list.insertBeginning(newNode);
+
+        this.map.set(key, newNode);
+
+        return newNode;
     }
 
     public get = (key: string): T => {
         const node = this.map.get(key);
-        if (!node) {
-            return null;
+        if(!node) {
+            return null;            
         }
 
-        this.list.removeNode(node);
-        this.list.insertNode(this.list.head(), node);
-        return node.element.value;
+        this.list.remove(node);
+        this.list.insertBeginning(node);
+        return node.data.value;
     }
 
     public size = () => {
