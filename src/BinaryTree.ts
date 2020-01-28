@@ -11,7 +11,7 @@ interface Tree<T> {
 function preOrderTraversal(tree: Tree<any>, callback: any) {
     const root = tree.root;
     const _preOrder = (node: Node<any>) => {
-        if(root === null) {
+        if(node === null) {
             return;
         }
 
@@ -27,7 +27,7 @@ function preOrderTraversal(tree: Tree<any>, callback: any) {
 function inOrderTraversal(tree: Tree<any>, callback: any) {
     const root = tree.root;
     const _inOrder = (node: Node<any>) => {
-        if(root === null) {
+        if(node === null) {
             return;
         }
         
@@ -42,7 +42,7 @@ function inOrderTraversal(tree: Tree<any>, callback: any) {
 function postOrderTraversal(tree: Tree<any>, callback: any) {
     const root = tree.root;
     const _postOrder = (node: Node<any>) => {
-        if(root === null) {
+        if(node === null) {
             return;
         }
         
