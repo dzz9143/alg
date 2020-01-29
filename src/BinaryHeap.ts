@@ -5,6 +5,36 @@ class BinaryHeap<T> {
     public data: T[];
     public compacity: number;
     public count: number;
+
+    public static swim<T>(arr: T[], cmp: Compare<T>, k: number) {
+        while (k > 1 && cmp(arr[Math.floor(k / 2) - 1], arr[k - 1]) < 0) {
+            const p = Math.floor(k / 2);    // parent index;
+            const tmp = arr[k - 1];
+            arr[k - 1] = arr[p - 1];
+            arr[p - 1] = tmp;
+            k = p;
+        }
+    }
+
+    public static sink<T>(arr: T[], cmp: Compare<T>, k: number, n: number) {
+        while (k * 2 <= n) {
+            let child = 2 * k;
+            if (2 * k < n && cmp(arr[2 * k - 1], arr[2 * k]) < 0) {
+                child++;
+            }
+
+            if (cmp(arr[child - 1], arr[k - 1]) < 0) {
+                break;
+            }
+
+            const tmp = arr[k - 1];
+            arr[k - 1] = arr[child - 1];
+            arr[child - 1] = tmp;
+
+            k = child;
+        }
+    }
+
     constructor(compacity: number, cmp: Compare<T>) {
         this.cmp = cmp;
         this.data = [];
@@ -26,7 +56,7 @@ class BinaryHeap<T> {
                 child++;
             }
 
-            if (this.compare(k, child) >= 0) {
+            if (this.compare(child, k) < 0) {
                 break;
             }
 

@@ -25,7 +25,6 @@ describe("BinaryHeap should", () => {
         heap.insert(5);
 
         expect(heap.del()).toEqual(11);
-        console.log('heap.data:', heap.data);
         expect(heap.data).toEqual([10, 5, 2]);
         expect(heap.del()).toEqual(10);
         expect(heap.data).toEqual([5, 2]);

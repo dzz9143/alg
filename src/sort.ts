@@ -1,3 +1,4 @@
+import { BinaryHeap } from './BinaryHeap';
 
 export interface ICompare {
     (a: any, b: any): number;
@@ -97,19 +98,19 @@ export function mergeSort(arr: any[], compare: ICompare = defaultCompare): any[]
         const res = [];
         let i = 0, j = 0;
 
-        while(i < arr1.length && j < arr2.length) {
-            if(compare(arr1[i], arr2[j]) < 0) {
+        while (i < arr1.length && j < arr2.length) {
+            if (compare(arr1[i], arr2[j]) < 0) {
                 res.push(arr1[i++]);
             } else {
                 res.push(arr2[j++]);
             }
         }
 
-        while(i < arr1.length) {
+        while (i < arr1.length) {
             res.push(arr1[i++]);
         }
 
-        while(j < arr2.length){
+        while (j < arr2.length) {
             res.push(arr2[j++]);
         }
 
@@ -141,4 +142,23 @@ export function mergeSort(arr: any[], compare: ICompare = defaultCompare): any[]
     }
 
     return _merge_sort(arr, 0, arr.length - 1);
+}
+
+export function heapSort<T>(arr: T[], compare: ICompare = defaultCompare): T[] {
+    let n = arr.length;
+    if (n === 0) {
+        return arr;
+    }
+    for (let i = Math.floor(n / 2); i >= 1; i--) {
+        BinaryHeap.sink(arr, compare, i, n);
+    }
+    while (n > 0) {
+        const max = arr[0];
+        arr[0] = arr[n - 1];
+        arr[n - 1] = max;
+        n--;
+        BinaryHeap.sink(arr, compare, 1, n);
+    }
+
+    return arr;
 }
