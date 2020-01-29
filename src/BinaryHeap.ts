@@ -36,30 +36,31 @@ class BinaryHeap<T> {
     }
 
     private compare = (i: number, j: number): number => {
-        return this.cmp(this.data[i], this.data[j]);
+        return this.cmp(this.data[i - 1], this.data[j - 1]);
     }
 
     private exchange = (i: number, j: number) => {
-        const tmp = this.data[i];
-        this.data[i] = this.data[j];
-        this.data[j] = tmp;
+        const tmp = this.data[i - 1];
+        this.data[i - 1] = this.data[j - 1];
+        this.data[j - 1] = tmp;
     }
 
     public insert = (val: T) => {
         this.count++;
-        this.data[this.count] = val;
+        this.data[this.count - 1] = val;
         this.swim(this.count);
     }
 
     // get the min/max 
     public del = (): T => {
-        if (this.count < 1) {
+        if (this.count === 0) {
             return null;
         }
 
-        const result = this.data[1];
-        this.data[1] = this.data[this.count--];
-        this.data = this.data.slice(0, this.count + 1);
+        const result = this.data[0];
+        this.count--;
+        this.data[0] = this.data[this.count];
+        this.data = this.data.slice(0, this.count);
         this.sink(1);
         return result;
     }

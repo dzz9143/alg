@@ -8,11 +8,11 @@ describe("BinaryHeap should", () => {
 
         heap.insert(10);
         heap.insert(2);
-        expect(heap.data).toEqual([undefined, 10, 2]);
+        expect(heap.data).toEqual([10, 2]);
         heap.insert(11);
-        expect(heap.data).toEqual([undefined, 11, 2, 10]);
+        expect(heap.data).toEqual([11, 2, 10]);
         heap.insert(5);
-        expect(heap.data).toEqual([undefined, 11, 5, 10, 2]);
+        expect(heap.data).toEqual([11, 5, 10, 2]);
     });
 
     it("be able to delMax for max heap", () => {
@@ -25,9 +25,10 @@ describe("BinaryHeap should", () => {
         heap.insert(5);
 
         expect(heap.del()).toEqual(11);
-        expect(heap.data).toEqual([undefined, 10, 5, 2]);
+        console.log('heap.data:', heap.data);
+        expect(heap.data).toEqual([10, 5, 2]);
         expect(heap.del()).toEqual(10);
-        expect(heap.data).toEqual([undefined, 5, 2]);
+        expect(heap.data).toEqual([5, 2]);
     });
 
     it("be able to create a min heap", () => {
@@ -37,11 +38,11 @@ describe("BinaryHeap should", () => {
 
         heap.insert(10);
         heap.insert(2);
-        expect(heap.data).toEqual([undefined, 2, 10]);
+        expect(heap.data).toEqual([2, 10]);
         heap.insert(11);
-        expect(heap.data).toEqual([undefined, 2, 10, 11]);
+        expect(heap.data).toEqual([2, 10, 11]);
         heap.insert(5);
-        expect(heap.data).toEqual([undefined, 2, 5, 11, 10]);
+        expect(heap.data).toEqual([2, 5, 11, 10]);
     });
 
     it("be able to delMin for min heap", () => {
@@ -54,9 +55,9 @@ describe("BinaryHeap should", () => {
         heap.insert(11);
         heap.insert(5);
         expect(heap.del()).toEqual(2);
-        expect(heap.data).toEqual([undefined, 5, 10, 11]);
+        expect(heap.data).toEqual([5, 10, 11]);
         expect(heap.del()).toEqual(5);
-        expect(heap.data).toEqual([undefined, 10, 11]);
+        expect(heap.data).toEqual([10, 11]);
     });
 
 });
