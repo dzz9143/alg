@@ -6,12 +6,14 @@ class Node<K, V> {
     public right: Node<K, V>;
     public left: Node<K, V>;
     public compare: Compare<K>;
+    public count: number;
 
     constructor(key: K, value: V) {
         this.key = key;
         this.value = value;
         this.left = null;
         this.right = null;
+        this.count = 1;
     }
 }
 
@@ -56,7 +58,7 @@ class BST<K, V> {
         } else {
             cur.value = value;
         }
-
+        cur.count = 1 + this._size(cur.left) + this._size(cur.right);
         return cur;
     }
 
@@ -130,6 +132,60 @@ class BST<K, V> {
             return key;
         }
 
+    }
+
+    // size
+    public size = (): number => {
+        return this._size(this.root);
+    }
+    private _size = (cur: Node<K, V>): number => {
+        if (cur === null) {
+            return 0;
+        }
+
+        return cur.count;
+    }
+
+    // rank - number of keys less than the given key
+    public rank = (key: K): number => {
+        return this._rank(this.root, key);
+    }
+
+    private _rank = (cur: Node<K, V>, key: K): number => {
+        if (cur === null) {
+            return 0;
+        }
+
+        const cmp = this.compare(cur.key, key);
+
+        if (cmp < 0) {
+            return 1 + this._size(cur.left) + this._rank(cur.right, key);
+        } else if (cmp > 0) {
+            return this._rank(cur.left, key);
+        } else {
+            return this._size(cur.left);
+        }
+    }
+
+    // select - key of rank K
+    public select = (rank: number): K => {
+        return this._select(this.root, rank);
+    }
+
+    private _select = (cur: Node<K, V>, rank: number): K => {
+        if (cur === null) {
+            return null;
+        }
+
+        const leftSize = this._size(cur.left);
+
+        if (leftSize < rank) {
+            return this._select(cur.right, rank - 1 - leftSize);
+        } else if (leftSize > rank) {
+            return this._select(cur.left, rank);
+        } else {
+            return cur.key;
+        }
     }
 }
 

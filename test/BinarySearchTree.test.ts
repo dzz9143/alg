@@ -45,7 +45,7 @@ describe("Binary Search Key should", () => {
         expect(bst.min()).toEqual(0);
     });
 
-    
+
     it("be able to get largest key", () => {
         const bst = new BST<number, string>(numberCompare);
         bst.put(10, "foo");
@@ -63,7 +63,7 @@ describe("Binary Search Key should", () => {
         bst.put(5, "nice");
         bst.put(0, "hello");
         bst.put(100, "world");
-        
+
         expect(bst.floor(50)).toEqual(20);
         expect(bst.floor(10)).toEqual(10);
         expect(bst.floor(9)).toEqual(5);
@@ -78,13 +78,53 @@ describe("Binary Search Key should", () => {
         bst.put(5, "nice");
         bst.put(0, "hello");
         bst.put(100, "world");
-        
+
         expect(bst.ceil(50)).toEqual(100);
         expect(bst.ceil(10)).toEqual(10);
         expect(bst.ceil(9)).toEqual(10);
         expect(bst.ceil(4)).toEqual(5);
         expect(bst.ceil(-1)).toEqual(0);
         expect(bst.ceil(110)).toBeNull();
+    });
+
+    it("be able to return the size of bst", () => {
+        const bst = new BST<number, string>(numberCompare);
+        expect(bst.size()).toEqual(0);
+        bst.put(10, "foo");
+        bst.put(20, "bar");
+        bst.put(5, "nice");
+        expect(bst.size()).toEqual(3);
+        bst.put(0, "hello");
+        bst.put(100, "world");
+        expect(bst.size()).toEqual(5);
+    });
+
+    it("be able to get the rank of given key", () => {
+        const bst = new BST<number, string>(numberCompare);
+        bst.put(10, "foo");
+        bst.put(20, "bar");
+        bst.put(5, "nice");
+        bst.put(0, "hello");
+        bst.put(100, "world");
+
+        expect(bst.rank(10)).toEqual(2);
+        expect(bst.rank(100)).toEqual(4);
+        expect(bst.rank(1)).toEqual(1);
+    });
+
+    it("be able to select key of rank k", () => {
+        const bst = new BST<number, string>(numberCompare);
+        bst.put(10, "foo");
+        bst.put(20, "bar");
+        bst.put(5, "nice");
+        bst.put(0, "hello");
+        bst.put(100, "world");
+
+        expect(bst.select(0)).toEqual(0);
+        expect(bst.select(1)).toEqual(5);
+        expect(bst.select(2)).toEqual(10);
+        expect(bst.select(1000)).toBeNull();
+        expect(bst.select(-1)).toBeNull();
     });
 });
 
