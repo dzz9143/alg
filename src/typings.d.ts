@@ -7,5 +7,11 @@ declare interface DoublyLinkedNode<T> {
 
 declare interface DoublyLinkedList<T> {
     head: DoublyLinkedNode<T>;
-    tail: DoublyLinkedNode<T>;    
+    tail: DoublyLinkedNode<T>;
 }
+
+type Compare<T> = (a: T, b: T) => number;
+
+export {
+    Compare,
+};

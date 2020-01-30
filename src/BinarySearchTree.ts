@@ -1,117 +1,276 @@
-import * as  BinaryTree from "./BinaryTree";
+import { Compare } from "./typings";
 
-// implement `find`, `insert`, `delete`
-class Node<T> implements BinaryTree.Node<T> {
-    public data: T;
-    public left: Node<T>;
-    public right: Node<T>;
+class Node<K, V> {
+    public key: K;
+    public value: V;
+    public right: Node<K, V>;
+    public left: Node<K, V>;
+    public compare: Compare<K>;
 
-    constructor(data: T, left: Node<T> = null, right: Node<T> = null) {
-        this.data = data;
-        this.left = left;
-        this.right = right;
+    constructor(key: K, value: V) {
+        this.key = key;
+        this.value = value;
+        this.left = null;
+        this.right = null;
     }
 }
 
-class Tree<T> implements BinaryTree.Tree<T> {
-    public root: Node<T>;
-    constructor() {
+class BST<K, V> {
+    public root: Node<K, V>;
+    public compare: Compare<K>;
+
+    constructor(compare: Compare<K>) {
+        this.compare = compare;
         this.root = null;
     }
 
-    public insert = (val: T) => {
-        if (!this.root) {
-            this.root = new Node(val);
-        } else {
-            let p = this.root;
-            while (p) {
-                if (val > p.data) {
-                    if (!p.right) {
-                        p.right = new Node(val);
-                        return;
-                    }
-
-                    p = p.right;
-                } else {
-                    if (!p.left) {
-                        p.left = new Node(val);
-                        return;
-                    }
-
-                    p = p.left;
-                }
-            }
-        }
-    }
-
-    public find = (val: T): Node<T> => {
+    public get = (key: K): V => {
         let p = this.root;
-        while (p) {
-            if (val > p.data) {
-                p = p.right;
-            } else if (val < p.data) {
+        while (p !== null) {
+            const cmp = this.compare(key, p.key);
+            if (cmp < 0) {
                 p = p.left;
+            } else if (cmp > 0) {
+                p = p.right;
             } else {
-                return p;
+                return p.value;
             }
         }
+
         return null;
     }
 
-    public delete = (val: T): boolean => {
-        let p = this.root;
-        let pp = null;
+    public put = (key: K, value: V) => {
+        this.root = this._put(this.root, key, value);
+    }
 
-        while (p && p.data !== val) {
-            pp = p;
-            if (val > p.data) {
-                p = p.right;
-            } else {
-                p = p.left;
-            }
+    private _put = (cur: Node<K, V>, key: K, value: V) => {
+        if (cur === null) {
+            return new Node<K, V>(key, value);
         }
-
-        if(!p) {
-            return false;
-        }
-
-        // handle delete with two children
-        if (p.left && p.right) {
-            let minP = p.left;
-            let minPP = p;
-
-            while(minP.left) {
-                minPP = minP;
-                minP = minP.left;
-            }
-
-            p.data = minP.data;
-            p = minP;
-            pp = minPP;
-        }
-
-        // handle delete with only one child
-        let child = null;
-        if(p.left) {
-            child = p.left;
-        } else if(p.right) {
-            child = p.right;
-        }
-
-        if (!pp) {
-            // handle delete with root
-            this.root = child;
-        } else if (pp.left === p) {
-            pp.left = child;
+        const cmp = this.compare(key, cur.key);
+        if (cmp < 0) {
+            cur.left = this._put(cur.left, key, value);
+        } else if (cmp > 0) {
+            cur.right = this._put(cur.right, key, value);
         } else {
-            pp.right = child;
+            cur.value = value;
         }
 
-        return true;
+        return cur;
+    }
+
+    // smallest key
+    public min = () => {
+        return this._min(this.root);
+    }
+
+    private _min = (cur: Node<K, V>): K => {
+        if (cur === null) {
+            return null;
+        }
+        const leftMin = this._min(cur.left);
+        return leftMin !== null ? leftMin : cur.key;
+    }
+
+    // largest key
+    public max = () => {
+        return this._max(this.root);
+    }
+
+    private _max = (cur: Node<K, V>): K => {
+        if (cur === null) {
+            return null;
+        }
+
+        const rightMax = this._max(cur.right);
+        return rightMax !== null ? rightMax : cur.key;
+    }
+
+    // floor -> largest key that small than or equal to the given key
+    public floor = (key: K): K => {
+        return this._floor(this.root, key);
+    }
+
+    private _floor = (cur: Node<K, V>, key: K): K => {
+        if (cur === null) {
+            return null;
+        }
+
+        const cmp = this.compare(cur.key, key);
+        if (cmp < 0) {
+            // two case, current node or in right tree
+            const rightFloor = this._floor(cur.right, key);
+            return rightFloor !== null ? rightFloor : cur.key;
+        } else if (cmp > 0) {
+            return this._floor(cur.left, key);
+        } else {
+            return key;
+        }
+    }
+
+    // ceil -> smallest key that great than or equal to the given key
+    public ceil = (key: K): K => {
+        return this._ceil(this.root, key);
+    }
+
+    private _ceil = (cur: Node<K, V>, key: K): K => {
+        if (cur === null) {
+            return null;
+        }
+
+        const cmp = this.compare(cur.key, key);
+        if (cmp < 0) {
+            return this._ceil(cur.right, key);
+        } else if (cmp > 0) {
+            // two case, current node or in left tree
+            const leftCeil = this._ceil(cur.left, key);
+            return leftCeil !== null ? leftCeil : cur.key;
+        } else {
+            return key;
+        }
+
     }
 }
 
 export {
+    BST,
     Node,
-    Tree,
-}
+};
+
+
+
+// import * as  BinaryTree from "./BinaryTree";
+
+// implement `find`, `insert`, `delete`
+// class Node<T> implements BinaryTree.Node<T> {
+//     public data: T;
+//     public left: Node<T>;
+//     public right: Node<T>;
+
+//     constructor(data: T, left: Node<T> = null, right: Node<T> = null) {
+//         this.data = data;
+//         this.left = left;
+//         this.right = right;
+//     }
+// }
+
+// class Tree<T> implements BinaryTree.Tree<T> {
+//     public root: Node<T>;
+//     constructor() {
+//         this.root = null;
+//     }
+
+//     private _find = (node: Node<T>, val: T): Node<T> => {
+//         if (!node) {
+//             return null;
+//         }
+//     }
+
+//     public find = (): T => {
+
+//     }
+// }
+
+// class Tree<T> implements BinaryTree.Tree<T> {
+//     public root: Node<T>;
+//     constructor() {
+//         this.root = null;
+//     }
+
+//     public insert = (val: T) => {
+//         if (!this.root) {
+//             this.root = new Node(val);
+//         } else {
+//             let p = this.root;
+//             while (p) {
+//                 if (val > p.data) {
+//                     if (!p.right) {
+//                         p.right = new Node(val);
+//                         return;
+//                     }
+
+//                     p = p.right;
+//                 } else {
+//                     if (!p.left) {
+//                         p.left = new Node(val);
+//                         return;
+//                     }
+
+//                     p = p.left;
+//                 }
+//             }
+//         }
+//     }
+
+//     public find = (val: T): Node<T> => {
+//         let p = this.root;
+//         while (p) {
+//             if (val > p.data) {
+//                 p = p.right;
+//             } else if (val < p.data) {
+//                 p = p.left;
+//             } else {
+//                 return p;
+//             }
+//         }
+//         return null;
+//     }
+
+//     public delete = (val: T): boolean => {
+//         let p = this.root;
+//         let pp = null;
+
+//         while (p && p.data !== val) {
+//             pp = p;
+//             if (val > p.data) {
+//                 p = p.right;
+//             } else {
+//                 p = p.left;
+//             }
+//         }
+
+//         if(!p) {
+//             return false;
+//         }
+
+//         // handle delete with two children
+//         if (p.left && p.right) {
+//             let minP = p.left;
+//             let minPP = p;
+
+//             while(minP.left) {
+//                 minPP = minP;
+//                 minP = minP.left;
+//             }
+
+//             p.data = minP.data;
+//             p = minP;
+//             pp = minPP;
+//         }
+
+//         // handle delete with only one child
+//         let child = null;
+//         if(p.left) {
+//             child = p.left;
+//         } else if(p.right) {
+//             child = p.right;
+//         }
+
+//         if (!pp) {
+//             // handle delete with root
+//             this.root = child;
+//         } else if (pp.left === p) {
+//             pp.left = child;
+//         } else {
+//             pp.right = child;
+//         }
+
+//         return true;
+//     }
+// }
+
+// export {
+//     Node,
+//     Tree,
+// }

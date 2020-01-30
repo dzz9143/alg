@@ -1,21 +1,20 @@
-interface Node<T> {
-    data: T;
-    left: Node<T>;
-    right: Node<T>;
+interface Node {
+    left: Node;
+    right: Node;
 }
 
-interface Tree<T> {
-    root: Node<T>;
+interface Tree {
+    root: Node;
 }
 
-function preOrderTraversal(tree: Tree<any>, callback: any) {
+function preOrderTraversal(tree: Tree, callback: any) {
     const root = tree.root;
-    const _preOrder = (node: Node<any>) => {
+    const _preOrder = (node: Node) => {
         if(node === null) {
             return;
         }
 
-        callback(node.data, node);
+        callback(node);
 
         _preOrder(node.left);
         _preOrder(node.right);
@@ -24,40 +23,37 @@ function preOrderTraversal(tree: Tree<any>, callback: any) {
     _preOrder(root);
 }
 
-function inOrderTraversal(tree: Tree<any>, callback: any) {
+function inOrderTraversal(tree: Tree, callback: any) {
     const root = tree.root;
-    const _inOrder = (node: Node<any>) => {
+    const _inOrder = (node: Node) => {
         if(node === null) {
             return;
         }
         
         _inOrder(node.left);
-        callback(node.data, node);
+        callback(node);
         _inOrder(node.right);
     }
 
     _inOrder(root);
 }
 
-function postOrderTraversal(tree: Tree<any>, callback: any) {
+function postOrderTraversal(tree: Tree, callback: any) {
     const root = tree.root;
-    const _postOrder = (node: Node<any>) => {
+    const _postOrder = (node: Node) => {
         if(node === null) {
             return;
         }
         
         _postOrder(node.left);
         _postOrder(node.right);
-        callback(node.data, node);
+        callback(node);
     }
 
     _postOrder(root);
 }
 
 export {
-    Node,
-    Tree,
-
     preOrderTraversal,
     inOrderTraversal,
     postOrderTraversal,
