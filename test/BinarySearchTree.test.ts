@@ -126,46 +126,35 @@ describe("Binary Search Key should", () => {
         expect(bst.select(1000)).toBeNull();
         expect(bst.select(-1)).toBeNull();
     });
+
+    it("be able to delete the smallest key in the tree", () => {
+        const bst = new BST<number, string>(numberCompare);
+        bst.put(10, "foo");
+        bst.put(20, "bar");
+        bst.put(5, "nice");
+        bst.put(0, "hello");
+        bst.put(100, "world");
+
+        bst.deleteMin();
+        expect(bst.min()).toEqual(5);
+        bst.deleteMin();
+        expect(bst.min()).toEqual(10);
+        expect(bst.size()).toEqual(3);
+    });
+
+    it("be able to delete node of given key", () => {
+        const bst = new BST<number, string>(numberCompare);
+        bst.put(10, "foo");
+        bst.put(20, "bar");
+        bst.put(5, "nice");
+        bst.put(0, "hello");
+        bst.put(100, "world");
+    
+        expect(bst.select(3)).toEqual(20);
+        bst.delete(20);
+        expect(bst.select(3)).toEqual(100);
+        bst.delete(5);
+        expect(bst.select(1)).toEqual(10);
+        expect(bst.size()).toEqual(3);
+    })
 });
-
-// import { Tree } from '../src/BinarySearchTree';
-// import { inOrderTraversal } from '../src/BinaryTree';
-
-// // helpers
-// function getInOrderToString<T>(tree: Tree<T>) {
-//     const res = [] as T[];
-//     inOrderTraversal(tree, (data: T) => {
-//         res.push(data);
-//     });
-
-//     return res.join(', ');
-// }
-
-// function constructFromArray<T>(arr: T[]) {
-//     const tree = new Tree<T>();
-//     arr.forEach((val: T) => {
-//         tree.insert(val);
-//     });
-
-//     return tree;
-// }
-
-// describe("Binary Search Tree should", () => {
-//     it("be able to insert and keep the order", () => {
-//         const tree = constructFromArray([20, 1, 100, 2]);
-//         expect(getInOrderToString(tree)).toEqual('1, 2, 20, 100');
-//     });
-
-//     it("be able to find the node of certain value", () => {
-//         const tree = constructFromArray([2, 4, 1, 3, 5]);
-//         expect(tree.find(2).data).toEqual(2);
-//         expect(tree.find(10)).toBeNull();
-//     });
-
-//     it("be able to delete the node of certain value", () => {
-//         const tree = constructFromArray([2, 4, 1, 3, 5]);
-//         expect(tree.delete(1)).toBeTruthy();
-//         expect(getInOrderToString(tree)).toEqual('2, 3, 4, 5');
-//         expect(tree.delete(100)).toBeFalsy();
-//     });
-// });
